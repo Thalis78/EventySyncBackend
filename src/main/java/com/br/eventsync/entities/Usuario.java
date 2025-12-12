@@ -17,7 +17,6 @@ public class Usuario {
     private String email;
     private String hashSenha;
     private String cidade;
-    private String urlFoto;
     private boolean visibilidadeParticipacao;
     private PapelUsuario papelUsuario;
 }

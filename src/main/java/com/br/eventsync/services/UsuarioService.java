@@ -55,7 +55,6 @@ public class UsuarioService {
 
             usuarioExistente.setNome(usuarioAtualizado.getNome());
             usuarioExistente.setCidade(usuarioAtualizado.getCidade());
-            usuarioExistente.setUrlFoto(usuarioAtualizado.getUrlFoto());
             usuarioExistente.setVisibilidadeParticipacao(usuarioAtualizado.isVisibilidadeParticipacao());
             usuarioExistente.setPapelUsuario(usuarioAtualizado.getPapelUsuario());
 

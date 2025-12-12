@@ -29,7 +29,6 @@ public class AuthService {
         usuario.setEmail(registerRequestDTO.getEmail());
         usuario.setHashSenha(registerRequestDTO.getSenha());
         usuario.setPapelUsuario(registerRequestDTO.getPapelUsuario());
-        usuario.setUrlFoto(registerRequestDTO.getUrlFoto());
         usuario.setCidade(registerRequestDTO.getCidade());
 
         usuarioRepository.save(usuario);

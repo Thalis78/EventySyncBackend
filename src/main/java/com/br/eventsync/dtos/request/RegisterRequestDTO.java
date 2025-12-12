@@ -9,5 +9,4 @@ public class RegisterRequestDTO {
     private String senha;
     private String cidade;
     private PapelUsuario papelUsuario;
-    private String urlFoto;
 }
