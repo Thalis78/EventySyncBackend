@@ -15,7 +15,7 @@ import java.util.Optional;
 public interface EventoRepository extends JpaRepository<Evento, Integer> {
     Optional<Evento> findById(Integer id);
 
-    List<Evento> findByTipoEvento(TipoEvento tipoEvento);
+    List<Evento> findByTipoEventoAndStatusEvento(TipoEvento tipoEvento, StatusEvento statusEvento);
 
     List<Evento> findByOrganizador(Usuario organizador);
 }

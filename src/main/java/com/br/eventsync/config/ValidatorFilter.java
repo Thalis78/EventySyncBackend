@@ -55,21 +55,12 @@ public class ValidatorFilter implements Filter {
 
         try {
             DecodedJWT decodedJWT = verifier.verify(jwtToken);
-
-            String papelStr = decodedJWT.getClaim("papelUsuario").asString();
-            PapelUsuario papelUsuario = PapelUsuario.valueOf(papelStr);
-
-            if (papelUsuario == PapelUsuario.PARTICIPANTE) {
-                httpServletResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Você não tem permissão pra acessar esta página!");
-                return;
-            }
-
             filterChain.doFilter(servletRequest, servletResponse);
 
         } catch (JWTVerificationException exception) {
             httpServletResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Token inválido ou expirado: " + exception.getMessage());
         } catch (IllegalArgumentException e) {
-            httpServletResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Papel de usuário inválido no token.");
+            httpServletResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Erro ao processar o token: " + e.getMessage());
         }
     }
 }

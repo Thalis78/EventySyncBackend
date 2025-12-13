@@ -15,6 +15,7 @@ public class InscricaoController {
     @Autowired
     private InscricaoService inscricaoService;
 
+    //OK
     @PutMapping("/{id}/aprovar")
     public ResponseEntity<?> aprovarInscricao(@PathVariable Integer id) {
         try {
@@ -24,7 +25,7 @@ public class InscricaoController {
             return new ResponseEntity<>(new MessageResponseDTO(e.getMessage()), HttpStatus.BAD_REQUEST);
         }
     }
-
+    //OK
     @PutMapping("/{id}/recusar")
     public ResponseEntity<?> recusarInscricao(@PathVariable Integer id) {
         try {
@@ -34,7 +35,7 @@ public class InscricaoController {
             return new ResponseEntity<>(new MessageResponseDTO(e.getMessage()), HttpStatus.BAD_REQUEST);
         }
     }
-
+    //OK
     @PutMapping("/{id}/confirmar-pagamento")
     public ResponseEntity<?> confirmarPagamento(@PathVariable Integer id) {
         try {

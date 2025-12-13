@@ -16,7 +16,7 @@ public class UsuarioController {
 
     @Autowired
     private UsuarioService usuarioService;
-
+    //OK
     @GetMapping("/me")
     public ResponseEntity<?> obterPerfil(HttpServletRequest request) {
         try {
@@ -26,7 +26,7 @@ public class UsuarioController {
             return new ResponseEntity<>(new MessageResponseDTO(e.getMessage()), HttpStatus.NOT_FOUND);
         }
     }
-
+    //OK
     @PutMapping("/me")
     public ResponseEntity<?> atualizarPerfil(@RequestBody Usuario usuarioAtualizado, HttpServletRequest request) {
         try {

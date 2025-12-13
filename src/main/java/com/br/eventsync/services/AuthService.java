@@ -1,6 +1,7 @@
 package com.br.eventsync.services;
 
 import com.br.eventsync.dtos.request.RegisterRequestDTO;
+import com.br.eventsync.dtos.response.AuthResponseDTO;
 import com.br.eventsync.entities.Usuario;
 import com.br.eventsync.exception.DefaultApiException;
 import com.br.eventsync.repositories.UsuarioRepository;
@@ -34,7 +35,7 @@ public class AuthService {
         usuarioRepository.save(usuario);
     }
 
-    public String login(String senha, String email){
+    public AuthResponseDTO login(String senha, String email){
         Usuario usuario = usuarioRepository.findByEmail(email)
                 .orElseThrow(() -> new DefaultApiException("Usuário não encontrado"));
 
@@ -45,11 +46,12 @@ public class AuthService {
         Date agora = new Date();
         Date expiracao = new Date(agora.getTime() + 24 * 60 * 60 * 1000L);
 
-        return JWT.create()
+
+        return new AuthResponseDTO(usuario.getPapelUsuario(),usuario.getId(),JWT.create()
                 .withSubject(usuario.getEmail())
                 .withClaim("papelUsuario", usuario.getPapelUsuario().name())
                 .withIssuedAt(agora)
                 .withExpiresAt(expiracao)
-                .sign(Algorithm.HMAC256(SECRET));
+                .sign(Algorithm.HMAC256(SECRET)));
     }
 }

@@ -110,6 +110,13 @@ public class InscricaoService {
             throw new DefaultApiException("Número máximo de inscrições atingido.");
         }
 
+        boolean usuarioJaInscrito = evento.getInscricoes().stream()
+                .anyMatch(inscricao -> inscricao.getUsuario().getId().equals(usuarioId));
+
+        if (usuarioJaInscrito) {
+            throw new DefaultApiException("Você já está inscrito neste evento.");
+        }
+
         Usuario usuario = usuarioRepository.findById(usuarioId)
                 .orElseThrow(() -> new DefaultApiException("Usuário não encontrado"));
 
@@ -125,7 +132,11 @@ public class InscricaoService {
             inscricao.setStatusInscricao(StatusInscricao.AGUARDANDO_PAGAMENTO);
         }
 
-        return inscricaoRepository.save(inscricao);
+        Inscricao novaInscricao = inscricaoRepository.save(inscricao);
+        evento.getInscricoes().add(novaInscricao);
+        eventoRepository.save(evento);
+
+        return novaInscricao;
     }
 
 

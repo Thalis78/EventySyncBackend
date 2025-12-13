@@ -1,14 +1,12 @@
 package com.br.eventsync.controllers;
 
-import com.br.eventsync.dtos.request.AvaliacaoRequestDTO;
 import com.br.eventsync.dtos.request.EventoRequestDTO;
+import com.br.eventsync.dtos.response.InscricaoEventoResponseDTO;
 import com.br.eventsync.dtos.response.InscricaoResponseDTO;
 import com.br.eventsync.dtos.response.MessageResponseDTO;
 import com.br.eventsync.entities.Certificado;
 import com.br.eventsync.entities.Evento;
-import com.br.eventsync.entities.Inscricao;
 import com.br.eventsync.exception.DefaultApiException;
-import com.br.eventsync.services.AvaliacaoService;
 import com.br.eventsync.services.CertificadoService;
 import com.br.eventsync.services.EventoService;
 import com.br.eventsync.services.InscricaoService;
@@ -30,11 +28,9 @@ public class EventoController {
     private InscricaoService inscricaoService;
 
     @Autowired
-    private AvaliacaoService avaliacaoService;
-
-    @Autowired
     private CertificadoService certificadoService;
 
+    //OK
     @PostMapping
     public ResponseEntity<?> criarEvento(@RequestBody EventoRequestDTO evento) {
         try {
@@ -45,6 +41,7 @@ public class EventoController {
         }
     }
 
+    //OK
     @PutMapping("/{id}")
     public ResponseEntity<?> editarEvento(@PathVariable Integer id, @RequestBody EventoRequestDTO evento) {
         try {
@@ -55,6 +52,7 @@ public class EventoController {
         }
     }
 
+    //OK
     @GetMapping("/{id}")
     public ResponseEntity<?> obterDetalhesEvento(@PathVariable Integer id) {
         try {
@@ -65,6 +63,7 @@ public class EventoController {
         }
     }
 
+    //OK
     @PostMapping("/{id}/abrir-inscricoes")
     public ResponseEntity<?> abrirInscricoes(@PathVariable Integer id) {
         try {
@@ -75,6 +74,7 @@ public class EventoController {
         }
     }
 
+    //OK
     @PostMapping("/{id}/fechar-inscricoes")
     public ResponseEntity<?> fecharInscricoes(@PathVariable Integer id) {
         try {
@@ -85,6 +85,7 @@ public class EventoController {
         }
     }
 
+    // OK
     @PostMapping("/{id}/registrar")
     public ResponseEntity<?> solicitarInscricao(@PathVariable Integer id, @RequestBody Integer usuarioId) {
         try {
@@ -94,27 +95,17 @@ public class EventoController {
             return new ResponseEntity<>(new MessageResponseDTO(e.getMessage()), HttpStatus.BAD_REQUEST);
         }
     }
-
-    @GetMapping("/{id}/inscricoes")
-    public ResponseEntity<?> listarInscricoes(@PathVariable Integer id) {
+    // OK
+    @GetMapping("/usuario/{usuarioId}")
+    public ResponseEntity<?> listarEventosDoUsuario(@PathVariable Integer usuarioId) {
         try {
-            List<InscricaoResponseDTO> inscricoes = inscricaoService.listarInscricoes(id);
-            return new ResponseEntity<>(inscricoes, HttpStatus.OK);
-        } catch (DefaultApiException e) {
-            return new ResponseEntity<>(new MessageResponseDTO(e.getMessage()), HttpStatus.NOT_FOUND);
-        }
-    }
-
-    @PostMapping("/{eventoId}/avaliacoes")
-    public ResponseEntity<?> avaliarEvento(@PathVariable Integer eventoId, @RequestBody AvaliacaoRequestDTO avaliacaoRequestDTO) {
-        try {
-            avaliacaoService.criarAvaliacao(eventoId, avaliacaoRequestDTO.getUsuarioId(), avaliacaoRequestDTO.getNota(), avaliacaoRequestDTO.getComentario());
-            return new ResponseEntity<>(new MessageResponseDTO("Avaliação realizada com sucesso."), HttpStatus.CREATED);
+            List<InscricaoEventoResponseDTO> eventosDoUsuario = eventoService.listarEventosPorUsuario(usuarioId);
+            return new ResponseEntity<>(eventosDoUsuario, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(new MessageResponseDTO(e.getMessage()), HttpStatus.BAD_REQUEST);
         }
     }
-
+    //OK
     @GetMapping("/pagos")
     public ResponseEntity<?> listarEventosPagos() {
         try {
@@ -124,7 +115,7 @@ public class EventoController {
             return new ResponseEntity<>(new MessageResponseDTO(e.getMessage()), HttpStatus.BAD_REQUEST);
         }
     }
-
+    //OK
     @GetMapping("/gratuitos")
     public ResponseEntity<?> listarEventosGratuitos() {
         try {
@@ -134,7 +125,7 @@ public class EventoController {
             return new ResponseEntity<>(new MessageResponseDTO(e.getMessage()), HttpStatus.BAD_REQUEST);
         }
     }
-
+    //OK
     @GetMapping("/organizador/{organizadorId}")
     public ResponseEntity<?> listarEventosDoOrganizador(@PathVariable Integer organizadorId) {
         try {
@@ -142,6 +133,16 @@ public class EventoController {
             return new ResponseEntity<>(eventosDoOrganizador, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(new MessageResponseDTO(e.getMessage()), HttpStatus.BAD_REQUEST);
+        }
+    }
+    //OK
+    @GetMapping("/{id}/inscricoes")
+    public ResponseEntity<?> listarInscricoes(@PathVariable Integer id) {
+        try {
+            List<InscricaoResponseDTO> inscricoes = inscricaoService.listarInscricoes(id);
+            return new ResponseEntity<>(inscricoes, HttpStatus.OK);
+        } catch (DefaultApiException e) {
+            return new ResponseEntity<>(new MessageResponseDTO(e.getMessage()), HttpStatus.NOT_FOUND);
         }
     }
 

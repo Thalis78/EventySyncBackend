@@ -17,7 +17,7 @@ public class AuthController {
 
     @Autowired
     private AuthService authService;
-
+    //OK
     @PostMapping("/registrar")
     public ResponseEntity<?> registrar(@RequestBody RegisterRequestDTO registerRequestDTO) {
         try {
@@ -31,8 +31,7 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<?> entrar(@RequestBody LoginRequestDTO loginRequestDTO) {
         try {
-            String token = authService.login(loginRequestDTO.getSenha(), loginRequestDTO.getEmail());
-            AuthResponseDTO responseDTO = new AuthResponseDTO(token);
+            AuthResponseDTO responseDTO = authService.login(loginRequestDTO.getSenha(), loginRequestDTO.getEmail());
             return new ResponseEntity<>(responseDTO, HttpStatus.OK);
         } catch (DefaultApiException e) {
             return new ResponseEntity<>(new MessageResponseDTO(e.getMessage()), HttpStatus.UNAUTHORIZED);

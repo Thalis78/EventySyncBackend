@@ -16,10 +16,9 @@ public class Inscricao {
     private Integer id;
 
     @ManyToOne
-    @JoinColumn(name = "evento_id", insertable = false, updatable = false)
+    @JoinColumn(name = "evento_id")
     @JsonIgnoreProperties({"inscricoes"})
     private Evento evento;
-
     @ManyToOne
     private Usuario usuario;
 

@@ -1,8 +1,10 @@
 package com.br.eventsync.services;
 
 import com.br.eventsync.dtos.request.EventoRequestDTO;
+import com.br.eventsync.dtos.response.InscricaoEventoResponseDTO;
 import com.br.eventsync.entities.*;
 import com.br.eventsync.entities.constantes.PapelUsuario;
+import com.br.eventsync.entities.constantes.StatusEvento;
 import com.br.eventsync.entities.constantes.TipoEvento;
 import com.br.eventsync.exception.DefaultApiException;
 import com.br.eventsync.repositories.*;
@@ -10,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -20,6 +23,9 @@ public class EventoService {
 
     @Autowired
     private UsuarioRepository usuarioRepository;
+
+    @Autowired
+    private InscricaoRepository inscricaoRepository;
 
 
     private void atualizarEventoComDTO(Evento evento, EventoRequestDTO eventoRequestDTO) {
@@ -84,12 +90,36 @@ public class EventoService {
     }
 
     public List<Evento> listarEventosPagos() {
-        return eventoRepository.findByTipoEvento(TipoEvento.PAGO);
+        return eventoRepository.findByTipoEventoAndStatusEvento(TipoEvento.PAGO, StatusEvento.ABERTO);
     }
 
     public List<Evento> listarEventosGratuitos() {
-        return eventoRepository.findByTipoEvento(TipoEvento.GRATUITO);
+        return eventoRepository.findByTipoEventoAndStatusEvento(TipoEvento.GRATUITO, StatusEvento.ABERTO);
     }
+
+    public List<InscricaoEventoResponseDTO> listarEventosPorUsuario(Integer usuarioId) {
+        usuarioRepository.findById(usuarioId)
+                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+
+        List<Inscricao> inscricoes = inscricaoRepository.findByUsuarioId(usuarioId);
+
+        return inscricoes.stream()
+                .map(inscricao -> {
+                    InscricaoEventoResponseDTO dto = new InscricaoEventoResponseDTO();
+
+                    dto.setId(inscricao.getEvento().getId());
+                    dto.setIdInscrito(inscricao.getId());
+                    dto.setTituloEvento(inscricao.getEvento().getTitulo());
+                    dto.setStatusInscricao(inscricao.getStatusInscricao());
+                    dto.setDataHoraInscricao(inscricao.getDataHoraInscricao());
+                    dto.setTipoEvento(inscricao.getEvento().getTipoEvento());
+                    dto.setCargaHoraria(inscricao.getEvento().getCargaHoraria());
+
+                    return dto;
+                })
+                .collect(Collectors.toList());
+    }
+
 
 
     public Evento obterDetalhesEvento(Integer id) {
